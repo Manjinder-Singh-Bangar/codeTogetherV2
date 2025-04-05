@@ -21,7 +21,10 @@ const handleRefreshToken = async (req, res) =>{
     const user = await User.findById(decoded._id)
     
     const accessToken = user.generateAccessToken()
-
+    const data = {
+        accessToken,
+        userId: user._id
+    }
     const options = {
         httpOnly: true,
         secure: true
@@ -29,7 +32,7 @@ const handleRefreshToken = async (req, res) =>{
 
     return res
     .cookie("accessToken", accessToken, options)
-    .json(new ApiResponse(201,accessToken, "Access Token Generated"))
+    .json(new ApiResponse(201,data, "Access Token Generated"))
 }
 
 export {handleRefreshToken}

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, verifyingUser, loginUser, gettingAllUser, logoutUser} from "../controllers/user.controller.js";
+import { registerUser, verifyingUser, loginUser, gettingAllUser, logoutUser, getUserProfile} from "../controllers/user.controller.js";
 import upload from "../Middleware/Multer.js";
 import { verifyAccessToken } from "../Middleware/AccessTokenVerification.js";
 import { handleRefreshToken } from "../controllers/refresh.controller.js";
@@ -20,7 +20,7 @@ router.route("/login").post(
 )
 
 router.route("/logout").post(verifyAccessToken, logoutUser)
-
+router.route("/userDetails/:_id").get(verifyAccessToken, getUserProfile)
 router.route("/refresh").get(handleRefreshToken)
 router.route("/people").get(verifyAccessToken, gettingAllUser)
 

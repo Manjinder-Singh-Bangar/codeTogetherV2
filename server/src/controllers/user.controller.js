@@ -208,8 +208,22 @@ const gettingAllUser = async (req, res) => {
 
 }
 
+const getUserProfile = async (req, res) => {
+    const {_id} = req.params
+
+    try {
+        const user = await User.findById(_id).select("-password -refreshToken"); 
+        if(!user){
+            return res.status(501).json(new ApiError(501, "Cannot find user"))
+        }
+        
+        return res.status(200).json(new ApiResponse(200, user, "User details fetched"))
+    } catch (error) {
+        
+    }
+}
 
 
 
 
-export { registerUser, verifyingUser, loginUser, gettingAllUser, logoutUser };
+export { registerUser, verifyingUser, loginUser, gettingAllUser, logoutUser, getUserProfile };
