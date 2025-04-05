@@ -4,6 +4,23 @@
 body{
     font-family: "Montserrat", serif;
 }
+
+.popup{
+    scale: 1.3;
+    transition: scale 400ms ease-in-out;
+}
+
+.messageUser::-webkit-scrollbar {
+    width: 12px;
+    background-color: rgb(154, 154, 154);
+}
+
+.messageUser::-webkit-scrollbar-thumb{
+    background-color: rgb(93, 93, 93);
+    border-radius: 6px;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

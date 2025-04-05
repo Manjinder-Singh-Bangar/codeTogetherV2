@@ -14,7 +14,7 @@ const Search = ({parentClass, inputClass}) => {
 
     }
   return (
-    <div className={`flex relative gap-4 justify-start items-center  ${parentClass}`}>
+    <div className={`flex bg-[#0b1120] gap-4 sticky top-0 justify-center items-center ${parentClass}`}>
         <input 
             ref={searchInput} 
             onChange={(e) =>{ setInputData(e.target.value)}} 

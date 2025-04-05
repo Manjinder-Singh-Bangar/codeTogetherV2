@@ -13,7 +13,6 @@ const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(location)
 
   const submitHandler = async (e) =>{
     e.preventDefault();
@@ -30,8 +29,9 @@ const Login = () => {
     axiosPrivate.post("users/login",  
     data
   ).then((res) =>{
-      const {accessToken, refreshToken} = res.data.data
-      dispatch(setAuth({accessToken, refreshToken}))
+
+      const {accessToken, refreshToken, userId} = res.data.data
+      dispatch(setAuth({accessToken, refreshToken, userId}))
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,
@@ -41,9 +41,17 @@ const Login = () => {
         draggable: true,
         theme: "dark",
       });
-      navigate(location.state?.from, "/")
+      navigate(location.state?.from || "/")
     }).catch((err) =>{
-      toast.error("Try again")
+      toast.error("Login failed, try again with different credentials!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      });
     })
 
     

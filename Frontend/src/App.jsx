@@ -7,6 +7,9 @@ import Signup from "./Pages/Signup.jsx"
 import NewPost from "./Components/NewPost.jsx"
 import ProtectedRoute from "./Components/ProtectedRoute.jsx"
 import Logout from "./Pages/Logout.jsx"
+import PersistLogin from "./Components/PersistLogin.jsx"
+import Profile from "./Pages/Profile.jsx"
+import Chat from "./Pages/Chat.jsx"
 
 function App() {
 
@@ -16,10 +19,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
         // Private Routes
-          <Route path="" element={<ProtectedRoute />}>
-            <Route path="" element={<Home />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="new-post" element={<NewPost />} />
+          <Route path="" element={<PersistLogin />}>
+            <Route path="" element={<ProtectedRoute />}>
+              <Route path="" element={<Home />} />
+              <Route path="chat" element={<Chat />} />
+              <Route path="search" element={<SearchPage />} />
+              <Route path="new-post" element={<NewPost />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
           </Route>
           // Public Routes
           <Route path="login" element={<Login />} />
