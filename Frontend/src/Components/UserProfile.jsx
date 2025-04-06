@@ -14,11 +14,6 @@ const UserProfile = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(user)
-
-    },[user])
-
-    useEffect(() => {
         if(userId){
             dispatch(fetchUserDetails(userId))
         }

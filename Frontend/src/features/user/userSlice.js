@@ -51,10 +51,14 @@ const userSlice = createSlice({
             state.status = "failed"
             state.error = action.error
         })
+        .addCase(fetchAllUsers.pending, (state) => {
+            state.status = "pending"
+        })
         .addCase(fetchAllUsers.fulfilled, (state, action) => {
             state.status = "successfull"
             state.allUsers = [...state.allUsers, action.payload]
         })
+        
     }
 })
 

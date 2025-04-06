@@ -18,11 +18,11 @@ const Footer = () => {
     if (auth) {
       dispatch(fetchAllUsers())
     }
+    
   }, [auth, dispatch])
 
   if (auth && userReqStatus === "successfull"){
     renderUsersAll = users[0].slice(0, 5).map((item, index) => {
-
       return (
         <ConnectionSuggestion key={index} user={item} />
       )
@@ -31,7 +31,7 @@ const Footer = () => {
 
   if(error) return <p>{error}</p>
    
-  if (!users) return <p>No user data available.</p>;
+  if (!users[0]) return <p>No user data available.</p>;
 
   return (
     <div className='w-[300px] relative'>
