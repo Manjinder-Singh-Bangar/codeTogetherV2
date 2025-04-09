@@ -34,7 +34,7 @@ export const getMessages = async(req, res) =>{
 
         if(!messages) return res.status(401).json(new ApiResponse(401, null, "No messages found"))
 
-        return res.status(200).json(new ApiResponse(200, messages, "Messages Fetched"))
+        return res.status(200).json(new ApiResponse(200, {messages}, "Messages Fetched"))
     } catch (error) {
         
     }
