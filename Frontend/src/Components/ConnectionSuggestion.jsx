@@ -2,7 +2,7 @@ import React from 'react'
 import { profilePlaceholder } from '../../public/Assets/Images/get-image'
 
 const ConnectionSuggestion = ({user}) => {
-    console.log("user:- ", user)
+    
     return (
         <div className="profile px-6 py-3 gap-6 flex justify-between items-center w-full ">
             <div className="right-side gap-2 flex items-center">
