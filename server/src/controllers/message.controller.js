@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/Cloudinary.js";
 import { getReceiverSocketId, io } from "../utils/Socket.js";
+import mongoose from "mongoose";
 
 export const getUsersForSidebar = async(req, res)=>{
     const loggedInUser = req.user._id;
@@ -91,7 +92,7 @@ export const sendMessage = async(req, res) =>{
 
 export const gettingRecieverUser = async (req,res) =>{
     try {
-        const {_id} = req.params
+        const {_id} = req.params;
         console.log(_id)
         if(!_id) return res.status(401).json(new ApiResponse(401, null, "No user selected"))
         
@@ -106,3 +107,77 @@ export const gettingRecieverUser = async (req,res) =>{
     }
     
 }
+
+export const getContacts = async (req, res) => {
+    try {
+        const {userId} = req.params
+
+        
+    } catch (error) {
+        return res.json(new ApiError(501, error?.message || "something went wrong"))
+    }
+}
+
+export const getChatUsers = async (req, res) => {
+    console.log("Decoded User:", req.user);
+  try {
+    const loggedInUserId = new mongoose.Types.ObjectId(String(req.user._id));
+
+    console.log("I am here!")
+    console.log(loggedInUserId)
+    if(!loggedInUserId) res.json(new ApiError(403, "User id not found"))
+
+    const chatUsers = await Message.aggregate([
+      {
+        $match: {
+          $or: [
+            { senderId: loggedInUserId },
+            { receiverId: loggedInUserId }
+          ]
+        }
+      },
+      {
+        $project: {
+          otherUser: {
+            $cond: [
+              { $eq: ["$senderId", loggedInUserId] },
+              "$receiverId",
+              "$senderId"
+            ]
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$otherUser"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: "$user"
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$user"
+        }
+      },
+      {
+        $match: {
+          _id: { $ne: loggedInUserId } // 👈 this filters out yourself
+        }
+      }
+    ]);
+
+    return res.status(200).json(new ApiResponse(200, chatUsers, "chat has been fetched"));
+  } catch (error) {
+    console.error("Error fetching chat users:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
