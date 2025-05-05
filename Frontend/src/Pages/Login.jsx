@@ -6,6 +6,9 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { setAuth } from '../features/auth/authSlice'
 import { useDispatch } from 'react-redux'
+import { motion } from "framer-motion"
+import { Loader } from 'lucide-react';
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,12 +16,15 @@ const Login = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  let loading = false;
 
   const submitHandler = async (e) =>{
+    loading = true;
+    
     e.preventDefault();
 
     if(!email && !password){
-      console.log("credentials are required")
+      toast.error("credentials are required")
       return;
     }
 
@@ -26,32 +32,16 @@ const Login = () => {
       email,
       password
     }
-    axiosPrivate.post("users/login",  
-    data
-  ).then((res) =>{
-
+    axiosPrivate.post("users/login", data)
+    .then((res) =>{
       const {accessToken, refreshToken, userId} = res.data.data
       dispatch(setAuth({accessToken, refreshToken, userId}))
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      });
+      toast.success("Login successful!");
+      loading = false
       navigate(location.state?.from || "/")
     }).catch((err) =>{
-      toast.error("Login failed, try again with different credentials!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      });
+      loading = false
+      toast.error("Login failed, try again with different credentials!");
     })
 
     
@@ -59,34 +49,39 @@ const Login = () => {
 
   return (
     <section className='w-full text-white bg-[#0b1120] min-h-screen max-h-fit flex flex-col justify-center items-center'>
-      <ToastContainer />
-      <div className="w-2/6">
-        <h1 className='font-bold text-2xl'>Sign In</h1>
-        <form action="" className='flex flex-col w-full gap-3 mt-5'>
-          <div className='flex flex-col gap-1'>
-            <label htmlFor="email">Email</label>
-            <input 
-            id='email'
-            onChange={(e) =>{
-              setEmail(e.target.value)
-            }} 
-            className='p-2 text-black rounded-lg outline-none' type="email" />
-          </div>
+      <motion.div
+        className='w-2/6'
+        initial={{ opacity: 0, y: -20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8 }}
+      >
+       
+          <h1 className='font-bold text-2xl'>Sign In</h1>
+          <form action="" className='flex flex-col w-full gap-3 mt-5'>
+            <div className='flex flex-col gap-1'>
+              <label htmlFor="email">Email</label>
+              <input 
+              id='email'
+              onChange={(e) =>{
+                setEmail(e.target.value)
+              }} 
+              className='p-2 text-black rounded-lg outline-none' type="email" />
+            </div>
 
-          <div className='flex flex-col gap-1'>
-            <label htmlFor="password">Password</label>
-            <input id='password'
-            onChange={(e) =>{
-              setPassword(e.target.value)
-            }} 
-            className='p-2 text-black rounded-lg outline-none' type="password" />
-            <span></span>
-          </div>
+            <div className='flex flex-col gap-1'>
+              <label htmlFor="password">Password</label>
+              <input id='password'
+              onChange={(e) =>{
+                setPassword(e.target.value)
+              }} 
+              className='p-2 text-black rounded-lg outline-none' type="password" />
+              <span></span>
+            </div>
 
-          <button onClick={submitHandler} type='submit' className='p-2 w-fit hover:bg-gray-200 hover:text-[#0b1120] transition-colors border-gray-300 border-2 mt-3'>Login</button>
+            <button disabled={loading} onClick={submitHandler} type='submit' className='p-2 w-full text-center text-[#1976d2] border-[#1976d2] hover:bg-[#1976d2] hover:text-[#0b1120] transition-colors rounded-lg border-2 mt-3'>{loading ? <Loader className=' h-5 w-5 animate-spin mx-auto' aria-hidden='true' /> : "Login"}</button>
 
-        </form>
-      </div>
+          </form>
+      </motion.div>
     </section>
   )
 }

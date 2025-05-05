@@ -10,6 +10,7 @@ import Logout from "./Pages/Logout.jsx"
 import PersistLogin from "./Components/PersistLogin.jsx"
 import Profile from "./Pages/Profile.jsx"
 import Chat from "./Pages/Chat.jsx"
+import { ToastContainer } from "react-toastify"
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           
         </Route>
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
       
     </>

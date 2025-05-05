@@ -9,7 +9,7 @@ const Layout = () => {
   
   return (
     <section className='flex'>
-      <section className="bg-white nav min-w-fit max-w-[154px] relative h-full">
+      <section className="bg-white nav min-w-[154px] relative h-full">
         <Navbar />
       </section>
       <section className={`childrens flex flex-col w-full ${location.pathname !== "/chat" ? "" : "w-[calc(100% - 68px)]"}`}>
